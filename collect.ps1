@@ -30,4 +30,16 @@ if ($LASTEXITCODE -ne 0) {
     throw "Editorial report failed with exit code $LASTEXITCODE"
 }
 
-Write-Host "Done. Open: $OutputPath\latest.md"
+& $PythonPath (Join-Path $ProjectRoot "visual_report.py") `
+    --input (Join-Path $OutputPath "latest.json") `
+    --html (Join-Path $OutputPath "latest.html") `
+    --svg (Join-Path $OutputPath "latest.svg")
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Visual report failed with exit code $LASTEXITCODE"
+}
+
+Write-Host "Done. Reports:"
+Write-Host "  $OutputPath\latest.md"
+Write-Host "  $OutputPath\latest.html"
+Write-Host "  $OutputPath\latest.svg"
