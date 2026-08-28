@@ -1,0 +1,23 @@
+{
+  "updated_at": "2026-08-27",
+  "description": "Публичные Telegram-каналы для поиска тем, подходящих каналу Dead Inside.",
+  "channels": [
+    {"username": "gulagdigital", "title": "Цифровой геноцид", "category": "technology", "tier": "core", "weight": 1.15, "enabled": true},
+    {"username": "humanimalien_monster", "title": "humanimalien", "category": "technology_culture", "tier": "niche", "weight": 1.2, "enabled": true},
+    {"username": "dankmarketing", "title": "Зашкваркетинг", "category": "marketing", "tier": "core", "weight": 1.0, "enabled": true},
+    {"username": "darkmgimo", "title": "Бахчисарайские гвоздики", "category": "culture", "tier": "core", "weight": 1.1, "enabled": true},
+    {"username": "goldchihuahua", "title": "Golden Chihuahua", "category": "fashion_culture", "tier": "core", "weight": 0.95, "enabled": true},
+    {"username": "decadentmrr", "title": "мортиры и перелески", "category": "culture_philosophy", "tier": "niche", "weight": 1.2, "enabled": true},
+    {"username": "philosophytoday", "title": "PhilosophyToday", "category": "philosophy_art", "tier": "niche", "weight": 1.15, "enabled": true},
+    {"username": "tolk_tolk", "title": "Толкователь", "category": "history_society", "tier": "core", "weight": 1.0, "enabled": true},
+    {"username": "arbuzimargiela", "title": "РазразиМеняМаржела", "category": "fashion_history", "tier": "niche", "weight": 1.0, "enabled": true},
+    {"username": "annushka_iskusstvovedma", "title": "Annushka искусствоведьма", "category": "art_history", "tier": "niche", "weight": 1.1, "enabled": true},
+    {"username": "arkhlikbez", "title": "Архитектурные излишества", "category": "architecture_history", "tier": "core", "weight": 0.95, "enabled": true},
+    {"username": "cinematheque_tg", "title": "CINÉMAтека", "category": "cinema", "tier": "core", "weight": 1.0, "enabled": true},
+    {"username": "cinemasha", "title": "Cinemasha", "category": "cinema", "tier": "core", "weight": 1.0, "enabled": true},
+    {"username": "real_videodrome", "title": "Videodrome", "category": "cinema", "tier": "niche", "weight": 1.05, "enabled": true},
+    {"username": "dvachannel", "title": "Двач", "category": "viral", "tier": "accelerator", "weight": 0.55, "enabled": true},
+    {"username": "bloodysx", "title": "Кровавая барыня", "category": "news", "tier": "accelerator", "weight": 0.45, "enabled": true},
+    {"username": "infantmilitario", "title": "Милитарист", "category": "geopolitics", "tier": "accelerator", "weight": 0.4, "enabled": false}
+  ]
+}
