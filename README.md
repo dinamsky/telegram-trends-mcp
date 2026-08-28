@@ -19,7 +19,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 4. Соберите первый отчёт за 48 часов:
 
 ```powershell
-.\collect.ps1 -Hours 48
+powershell -ExecutionPolicy Bypass -File .\collect.ps1 -Hours 48
 ```
 
 Результаты появятся в папке `output`: `latest.md` для чтения и `latest.json` для последующего анализа моделью.
