@@ -14,6 +14,8 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 
 Если Python 3.11/3.12 отсутствует, установщик автоматически поставит Python 3.12 через `winget` для текущего пользователя. Если `winget` недоступен, установите Python с https://www.python.org/downloads/windows/ и отметьте `Add Python to PATH`.
 
+Наличие одного только системного `py.exe` не считается установленным Python: установщик пропустит пустой launcher и автоматически перейдёт к установке Python 3.12.
+
 4. Соберите первый отчёт за 48 часов:
 
 ```powershell
