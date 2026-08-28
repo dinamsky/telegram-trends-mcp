@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "telegram-public": {
+      "command": "C:\\FULL_PATH\\telegram-trends-mcp\\.venv\\Scripts\\shadow-tg.exe"
+    }
+  }
+}
