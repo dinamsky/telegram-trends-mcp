@@ -30,8 +30,25 @@ function Find-Python {
             continue
         }
 
-        & $Command @PrefixArgs -c "import sys; raise SystemExit(0 if sys.version_info[:2] in [(3, 11), (3, 12)] else 1)" 2>$null
-        if ($LASTEXITCODE -eq 0) {
+        # Windows may have py.exe installed without any Python runtime behind it.
+        # With ErrorActionPreference=Stop its diagnostic on stderr becomes a
+        # terminating NativeCommandError, so probe candidates in a protected
+        # scope and treat every failure as "candidate unavailable".
+        $PreviousErrorActionPreference = $ErrorActionPreference
+        $ProbeExitCode = 1
+        try {
+            $ErrorActionPreference = "SilentlyContinue"
+            $null = & $Command @PrefixArgs -c "import sys; raise SystemExit(0 if sys.version_info[:2] in [(3, 11), (3, 12)] else 1)" 2>&1
+            $ProbeExitCode = $LASTEXITCODE
+        }
+        catch {
+            $ProbeExitCode = 1
+        }
+        finally {
+            $ErrorActionPreference = $PreviousErrorActionPreference
+        }
+
+        if ($ProbeExitCode -eq 0) {
             return $Candidate
         }
     }
