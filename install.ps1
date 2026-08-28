@@ -106,4 +106,4 @@ Assert-NativeSuccess "Dependency installation"
 Assert-NativeSuccess "MCP check"
 
 Write-Host ""
-Write-Host "Installation complete. Run: .\collect.ps1 -Hours 48"
+Write-Host "Installation complete. Run: powershell -ExecutionPolicy Bypass -File .\collect.ps1 -Hours 48"
