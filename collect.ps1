@@ -8,7 +8,7 @@ $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $PythonPath = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 
 if (-not (Test-Path $PythonPath)) {
-    throw "Сначала выполните .\install.ps1"
+    throw "Run .\install.ps1 first."
 }
 
 & $PythonPath (Join-Path $ProjectRoot "collector.py") `
