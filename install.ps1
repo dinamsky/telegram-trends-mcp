@@ -60,7 +60,7 @@ function Assert-NativeSuccess {
     param([string]$Action)
 
     if ($LASTEXITCODE -ne 0) {
-        throw "$Action завершилось с ошибкой (код $LASTEXITCODE)."
+        throw "$Action failed with exit code $LASTEXITCODE."
     }
 }
 
@@ -68,42 +68,42 @@ $PythonCommand = @(Find-Python)
 
 if (-not $PythonCommand -and -not $SkipPythonInstall) {
     if (Get-Command winget -ErrorAction SilentlyContinue) {
-        Write-Host "Python 3.11/3.12 не найден. Устанавливаю Python 3.12 через winget..."
+        Write-Host "Python 3.11/3.12 was not found. Installing Python 3.12 with winget..."
         & winget install --exact --id Python.Python.3.12 --scope user `
             --accept-package-agreements --accept-source-agreements
-        Assert-NativeSuccess "Установка Python"
+        Assert-NativeSuccess "Python installation"
         $PythonCommand = @(Find-Python)
     }
 }
 
 if (-not $PythonCommand) {
     throw @"
-Python 3.11/3.12 не найден.
-Установите Python 3.12 командой:
+Python 3.11/3.12 was not found.
+Install Python 3.12 with:
   winget install --exact --id Python.Python.3.12 --scope user
-Затем закройте PowerShell, откройте его снова и повторите запуск install.ps1.
+Then close PowerShell, open it again, and run install.ps1 once more.
 "@
 }
 
 $BaseCommand = $PythonCommand[0]
 $BaseArgs = @($PythonCommand | Select-Object -Skip 1)
 
-Write-Host "Создаю виртуальное окружение..."
+Write-Host "Creating the virtual environment..."
 & $BaseCommand @BaseArgs -m venv $VenvPath
-Assert-NativeSuccess "Создание виртуального окружения"
+Assert-NativeSuccess "Virtual environment creation"
 
 if (-not (Test-Path $PythonPath)) {
-    throw "Виртуальное окружение не создано: $PythonPath не найден."
+    throw "Virtual environment was not created: $PythonPath was not found."
 }
 
 & $PythonPath -m pip install --upgrade pip
-Assert-NativeSuccess "Обновление pip"
+Assert-NativeSuccess "pip upgrade"
 
 & $PythonPath -m pip install -r (Join-Path $ProjectRoot "requirements.txt")
-Assert-NativeSuccess "Установка зависимостей"
+Assert-NativeSuccess "Dependency installation"
 
 & $PythonPath -c "import asyncio; from tg_mcp.server import mcp; tools=asyncio.run(mcp.list_tools()); print('MCP OK:', ', '.join(t.name for t in tools))"
-Assert-NativeSuccess "Проверка MCP"
+Assert-NativeSuccess "MCP check"
 
 Write-Host ""
-Write-Host "Установка завершена. Запустите: .\collect.ps1 -Hours 48"
+Write-Host "Installation complete. Run: .\collect.ps1 -Hours 48"
