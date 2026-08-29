@@ -7,13 +7,23 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $PythonPath = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 $OutputPath = Join-Path $ProjectRoot "output"
+$BaseWatchlistPath = Join-Path $ProjectRoot "watchlist.json"
+$PersonalWatchlistPath = Join-Path $ProjectRoot "watchlist.personal.json"
 
 if (-not (Test-Path $PythonPath)) {
     throw "Run .\install.ps1 first."
 }
 
+$WatchlistPath = $BaseWatchlistPath
+if (Test-Path $PersonalWatchlistPath) {
+    $WatchlistPath = $PersonalWatchlistPath
+    Write-Host "Using private personalized watchlist: $PersonalWatchlistPath"
+} else {
+    Write-Host "Using base watchlist: $BaseWatchlistPath"
+}
+
 & $PythonPath (Join-Path $ProjectRoot "collector.py") `
-    --watchlist (Join-Path $ProjectRoot "watchlist.json") `
+    --watchlist $WatchlistPath `
     --output $OutputPath `
     --hours $Hours `
     --limit $Limit
