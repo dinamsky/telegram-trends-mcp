@@ -2,5 +2,12 @@
 __pycache__/
 *.py[cod]
 output/
+watchlist.personal.json
+telegram_analysis/
+channels.json
+forward_stats.json
+links.json
+profile.json
+messages_sample.jsonl
 .DS_Store
 Thumbs.db
