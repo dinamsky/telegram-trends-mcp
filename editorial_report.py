@@ -28,6 +28,8 @@ GENERIC_TOPIC_PHRASES = {
     "московской области", "число погибших", "таким образом", "данный момент",
     "настоящее время", "друг другу", "всему миру", "большая часть", "нашем канале",
     "канал мах", "тысяч рублей", "млрд рублей", "своего рода",
+    "банка россии", "государственной думы", "the new york times", "vk видео",
+    "боевых действий", "военного врача", "главного героя",
 }
 
 CATEGORY_FIT = {
@@ -207,12 +209,53 @@ def topic_is_pulse(topic: dict[str, Any]) -> bool:
     )
     interest = bool(INTEREST_RE.search(text))
     newsy = bool(NEWSY_RE.search(text))
+    term = str(topic.get("term") or "")
+    term_newsy = bool(NEWSY_RE.search(term))
+    term_interest = bool(INTEREST_RE.search(term))
 
+    if term_newsy and not term_interest:
+        return True
     if sources and pulse_sources / len(sources) >= 0.6 and not interest:
         return True
     if newsy and not interest and pulse_sources >= 1:
         return True
     return False
+
+
+def dedupe_trends(rows: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    selected: list[dict[str, Any]] = []
+    for row in rows:
+        row_sources = set(str(v) for v in (row.get("sources") or []))
+        row_links = set(
+            str(e.get("link")) for e in (row.get("examples") or []) if e.get("link")
+        )
+        row_tokens = {
+            w for w in norm(str(row.get("term") or "")).split()
+            if len(w) >= 4 and w not in GENERIC_TOPIC_WORDS
+        }
+        duplicate = False
+        for accepted in selected:
+            acc_sources = set(str(v) for v in (accepted.get("sources") or []))
+            union = row_sources | acc_sources
+            source_jaccard = len(row_sources & acc_sources) / max(len(union), 1)
+            acc_links = set(
+                str(e.get("link")) for e in (accepted.get("examples") or []) if e.get("link")
+            )
+            acc_tokens = {
+                w for w in norm(str(accepted.get("term") or "")).split()
+                if len(w) >= 4 and w not in GENERIC_TOPIC_WORDS
+            }
+            if row_links & acc_links and (source_jaccard >= 0.25 or row_tokens & acc_tokens):
+                duplicate = True
+                break
+            if row_tokens & acc_tokens and source_jaccard >= 0.65:
+                duplicate = True
+                break
+        if not duplicate:
+            selected.append(row)
+        if len(selected) >= limit:
+            break
+    return selected
 
 
 def real_trends(topics: list[dict[str, Any]], limit: int = 15) -> list[dict[str, Any]]:
@@ -247,9 +290,10 @@ def real_trends(topics: list[dict[str, Any]], limit: int = 15) -> list[dict[str,
     pulse.sort(key=key, reverse=True)
 
     pulse_cap = min(3, max(1, limit // 5))
-    result = editorial[: max(0, limit - pulse_cap)]
-    result.extend(pulse[: max(0, limit - len(result))])
-    result.sort(key=key, reverse=True)
+    result = editorial[:limit]
+    remaining_pulse = min(pulse_cap, max(0, limit - len(result)))
+    result.extend(pulse[:remaining_pulse])
+    result = dedupe_trends(result, limit)
     for row in result:
         row.pop("_rank", None)
     return result[:limit]
