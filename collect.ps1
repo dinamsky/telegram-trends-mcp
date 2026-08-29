@@ -32,7 +32,7 @@ if ($LASTEXITCODE -ne 0) {
     throw "Collector failed with exit code $LASTEXITCODE"
 }
 
-& $PythonPath (Join-Path $ProjectRoot "editorial_report.py") `
+& $PythonPath (Join-Path $ProjectRoot "editorial_policy.py") `
     --input (Join-Path $OutputPath "latest.json") `
     --output (Join-Path $OutputPath "latest.md")
 
@@ -40,7 +40,7 @@ if ($LASTEXITCODE -ne 0) {
     throw "Editorial report failed with exit code $LASTEXITCODE"
 }
 
-& $PythonPath (Join-Path $ProjectRoot "visual_report.py") `
+& $PythonPath (Join-Path $ProjectRoot "visual_policy.py") `
     --input (Join-Path $OutputPath "latest.json") `
     --html (Join-Path $OutputPath "latest.html") `
     --svg (Join-Path $OutputPath "latest.svg")
